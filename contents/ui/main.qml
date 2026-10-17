@@ -273,7 +273,8 @@ PlasmoidItem {
             // Dynamic color/border states
             color: {
                 if (isCurrent) {
-                    return hasCustomColor ? customColor : Kirigami.Theme.highlightColor;
+                    var selectedCol = hasCustomColor ? customColor : Kirigami.Theme.highlightColor;
+                    return Qt.rgba(selectedCol.r, selectedCol.g, selectedCol.b, Plasmoid.configuration.selectedOpacity);
                 } else {
                     var opacity = Plasmoid.configuration.unselectedOpacity;
                     var baseCol = (hasCustomColor && Plasmoid.configuration.colorUnselected) ? customColor : Kirigami.Theme.textColor;
@@ -284,7 +285,8 @@ PlasmoidItem {
 
             border.color: {
                 if (isCurrent) {
-                    return hasCustomColor ? customColor : Kirigami.Theme.highlightColor;
+                    var selectedCol = hasCustomColor ? customColor : Kirigami.Theme.highlightColor;
+                    return Qt.rgba(selectedCol.r, selectedCol.g, selectedCol.b, Plasmoid.configuration.selectedOpacity);
                 } else {
                     var baseCol = (hasCustomColor && Plasmoid.configuration.colorUnselected) ? customColor : Kirigami.Theme.textColor;
                     return Qt.rgba(baseCol.r, baseCol.g, baseCol.b, Math.min(1.0, Plasmoid.configuration.unselectedOpacity * 2));

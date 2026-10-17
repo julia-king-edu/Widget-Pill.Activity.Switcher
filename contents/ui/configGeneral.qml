@@ -19,6 +19,7 @@ KCM.SimpleKCM {
     property alias cfg_buttonWidth: buttonWidthSpinBox.value
     property alias cfg_buttonHeight: buttonHeightSpinBox.value
     property alias cfg_colorUnselected: colorUnselectedCheckbox.checked
+    property alias cfg_selectedOpacity: selectedOpacitySlider.value
     property alias cfg_unselectedOpacity: unselectedOpacitySlider.value
     property alias cfg_invertSelectionSizing: invertSelectionSizingCheckbox.checked
     property alias cfg_sizeRatio: sizeRatioSlider.value
@@ -174,6 +175,24 @@ KCM.SimpleKCM {
             id: colorUnselectedCheckbox
             Kirigami.FormData.label: "Color Unselected:"
             text: "Apply custom color to unselected buttons"
+        }
+
+        RowLayout {
+            Kirigami.FormData.label: "Selected Opacity:"
+            spacing: Kirigami.Units.smallSpacing
+
+            Slider {
+                id: selectedOpacitySlider
+                from: 0.0
+                to: 1.0
+                stepSize: 0.05
+                Layout.fillWidth: true
+            }
+
+            Label {
+                text: Math.round(selectedOpacitySlider.value * 100) + "%"
+                Layout.preferredWidth: Kirigami.Units.gridUnit * 2
+            }
         }
 
         RowLayout {

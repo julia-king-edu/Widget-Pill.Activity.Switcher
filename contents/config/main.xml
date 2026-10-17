@@ -32,6 +32,9 @@
     <entry name="colorUnselected" type="Bool">
       <default>true</default>
     </entry>
+    <entry name="selectedOpacity" type="Double">
+      <default>1.0</default>
+    </entry>
     <entry name="unselectedOpacity" type="Double">
       <default>0.2</default>
     </entry>
