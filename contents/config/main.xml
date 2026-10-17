@@ -11,6 +11,9 @@
     <entry name="showIcons" type="Bool">
       <default>false</default>
     </entry>
+    <entry name="cycleMode" type="Bool">
+      <default>false</default>
+    </entry>
     <entry name="layoutOrientation" type="Int">
       <default>1</default>
     </entry>

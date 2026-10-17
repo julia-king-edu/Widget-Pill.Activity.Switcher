@@ -120,6 +120,13 @@ PlasmoidItem {
     }
 
     property var activitiesModel: []
+    readonly property var displayedActivitiesModel: {
+        if (!Plasmoid.configuration.cycleMode) {
+            return activitiesModel;
+        }
+        var currentActivity = actInfo.currentActivity;
+        return currentActivity && activitiesModel.indexOf(currentActivity) !== -1 ? [currentActivity] : [];
+    }
 
     function updateActivitiesModel() {
         var current = actInfo.runningActivities();
@@ -143,6 +150,17 @@ PlasmoidItem {
         if (JSON.stringify(root.activitiesModel) !== JSON.stringify(processed)) {
             root.activitiesModel = processed;
         }
+    }
+
+    function switchToActivity(activityId) {
+        execSource.run(root.qdbusCmd + ' org.kde.ActivityManager /ActivityManager/Activities SetCurrentActivity "' + activityId + '"')
+    }
+
+    function switchToNextActivity() {
+        if (activitiesModel.length === 0) return;
+        var currentIndex = activitiesModel.indexOf(actInfo.currentActivity);
+        var nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % activitiesModel.length;
+        switchToActivity(activitiesModel[nextIndex]);
     }
 
     Connections {
@@ -179,7 +197,7 @@ PlasmoidItem {
             width: parent.width
 
             Repeater {
-                model: root.activitiesModel
+                model: root.displayedActivitiesModel
                 delegate: activityButtonDelegate
             }
         }
@@ -194,7 +212,7 @@ PlasmoidItem {
             height: parent.height
 
             Repeater {
-                model: root.activitiesModel
+                model: root.displayedActivitiesModel
                 delegate: activityButtonDelegate
             }
         }
@@ -208,6 +226,7 @@ PlasmoidItem {
             clip: true
 
             readonly property string activityId: modelData
+            readonly property int activityIndex: root.activitiesModel.indexOf(activityId)
             readonly property bool isCurrent: actInfo.currentActivity === activityId
             readonly property color customColor: root.getActivityColor(activityId)
             readonly property bool hasCustomColor: customColor.toString() !== "" && customColor.toString() !== "#000000"
@@ -294,7 +313,7 @@ PlasmoidItem {
                     
                     width: Plasmoid.configuration.showIcons ? Kirigami.Units.iconSizes.small : 0
                     height: Plasmoid.configuration.showIcons ? Kirigami.Units.iconSizes.small : 0
-                    source: root.getActivityIcon(activityBtn.activityId, index)
+                    source: root.getActivityIcon(activityBtn.activityId, activityBtn.activityIndex)
                     visible: Plasmoid.configuration.showIcons
 
                     color: {
@@ -345,8 +364,11 @@ PlasmoidItem {
                     // Debug: log (plasmashell --replace &)
                     console.log("Pill clicked! Activity ID: " + activityBtn.activityId + " Name: " + actInfo.activityName(activityBtn.activityId))
                     
-                    //switch the activity
-                    execSource.run(root.qdbusCmd + ' org.kde.ActivityManager /ActivityManager/Activities SetCurrentActivity "' + activityBtn.activityId + '"')
+                    if (Plasmoid.configuration.cycleMode) {
+                        root.switchToNextActivity();
+                    } else {
+                        root.switchToActivity(activityBtn.activityId);
+                    }
                 }
             }
 

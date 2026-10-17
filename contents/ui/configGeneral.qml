@@ -12,6 +12,7 @@ KCM.SimpleKCM {
 
     property alias cfg_showNames: showNamesCheckbox.checked
     property alias cfg_showIcons: showIconsCheckbox.checked
+    property alias cfg_cycleMode: cycleModeCheckbox.checked
     property alias cfg_layoutOrientation: layoutOrientationComboBox.currentIndex
     property alias cfg_buttonShape: buttonShapeComboBox.currentIndex
     property alias cfg_cornerRadius: cornerRadiusSpinBox.value
@@ -161,6 +162,12 @@ KCM.SimpleKCM {
             id: showIconsCheckbox
             Kirigami.FormData.label: "Display Icon:"
             text: "Show icons in buttons"
+        }
+
+        CheckBox {
+            id: cycleModeCheckbox
+            Kirigami.FormData.label: "Cycle Mode:"
+            text: "Show only the current activity and cycle on click"
         }
 
         CheckBox {
